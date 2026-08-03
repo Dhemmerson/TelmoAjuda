@@ -1,0 +1,529 @@
+<body>
+
+    <div class="top-bar">
+        <!-- Widget Esquerdo: Saudação + Relógio + Tema -->
+        <div class="top-widget widget-left" id="widgetLeft">
+            <div class="time-info">
+                <span class="greeting" id="greetingText">Olá, Equipe Wick! ✨</span>
+                <span class="clock" id="clockText"><span id="clockHours">00:00</span><span id="clockSeconds" class="clock-seconds">:00</span></span>
+            </div>
+            <button class="theme-toggle-inline" onclick="toggleTheme()" title="Alternar tema">
+                <span class="moon-icon">⏾</span>
+                <span class="sun-icon">☼</span>
+            </button>
+        </div>
+        
+        <!-- Widget Direito: Clima Dinâmico e Clicável -->
+        <div class="top-widget widget-right" id="widgetRight" onclick="openWeatherModal()" title="Ver previsão por horário">
+            <div class="weather-icon" id="weatherIcon">🔄</div>
+            <div class="weather-info">
+                <span class="weather-temp" id="weatherTemp">Carregando...</span>
+                <span class="weather-desc" id="weatherDesc">Buscando clima...</span>
+            </div>
+            <div class="water-widget" id="waterWidget" onclick="registrarAgua(event)" title="Registrar água consumida">
+                <span class="water-icon">💧</span>
+                <div class="water-info">
+                    <strong>Hidratação</strong>
+                    <small id="waterNext">Clique para registrar água</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Widget da Central de Ajuda -->
+    <div class="help-center-box">
+        <span class="help-text">TELMO AJUDA</span>
+    </div>
+
+    <!-- JANELA MODAL: PREVISÃO DO TEMPO DETALHADA -->
+    <div class="weather-modal" id="weatherModal" onclick="closeWeatherModal(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Previsão do Tempo (Goiânia)</h3>
+                <button class="close-modal" onclick="document.getElementById('weatherModal').classList.remove('active')">&times;</button>
+            </div>
+            
+            <div class="weather-details-grid">
+                <div class="detail-item">
+                    <span>Qualidade do ar:</span> 
+                    <strong id="modalAirQuality">--</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Umidade:</span> 
+                    <strong id="modalHumidity">--%</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Chuva:</span> 
+                    <strong id="modalRain">--%</strong>
+                </div>
+            </div>
+
+            <div class="hourly-container" id="hourlyContainer"></div>
+        </div>
+    </div>
+
+    <!-- Tela de Bloqueio Moderna Atualizada com Logo IDêntica -->
+    <div id="loginOverlay" class="overlay-screen">
+        <div class="login-box" id="boxGeral">
+            <!-- Título Exclusivo Telmo Ajuda na Tela de Login -->
+            <div style="margin-bottom: 25px;">
+                <span class="help-text" style="font-size: 38px; letter-spacing: 2px;">TELMO AJUDA</span>
+            </div>
+
+            <div class="password-container">
+                <input type="password" id="password" placeholder="Digite sua senha" onkeydown="if(event.key === 'Enter') checkPassword()">
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password', this)" title="Mostrar/Ocultar senha">👁️</button>
+            </div>
+            <div class="error-message" id="errorGeral"></div>
+            <button class="btn-entrar" onclick="checkPassword()">Entrar</button>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <div id="bannerContainer">
+            <div id="bannerTrack"></div>
+            <div class="banner-controls">
+                <button id="prevBanner" class="banner-arrow">‹</button>
+                <div id="bannerDots"></div>
+                <button id="nextBanner" class="banner-arrow">›</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulário de Busca -->
+    <form id="searchForm" class="search-container">
+        <input type="text" id="systemSearch" placeholder="Buscar procedimento..." onkeyup="filterSystems()">
+        <button type="button" id="voiceBtn" title="Comando de voz" aria-label="Comando de voz" onclick="startVoiceRecognition()">
+            <svg viewBox="0 0 24 24" aria-hidden="true" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="3" width="6" height="11" rx="3"></rect>
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"></path>
+            </svg>
+        </button>
+    </form>
+
+    <!-- Abas de Navegação -->
+    <div class="tab-container" id="mainTabs">
+        <button class="tab active" onclick="switchTab('tab1', this)">PRINCIPAIS</button>
+        <button class="tab" onclick="switchTab('tab3', this)">UTILITÁRIOS</button>
+        <button class="tab" onclick="switchTab('tab2', this)">OPERADORAS</button>
+        <button class="tab" onclick="switchTab('tab5', this)">FINANCEIRO</button>
+        <button class="tab" id="diretoria" onclick="tryOpenDiretoria(this)">DIRETORIA</button>
+    </div>
+
+    <!-- ABA 1: PRINCIPAIS -->
+    <div id="tab1" class="tab-content active">
+        <div class="main__item">
+            <a href="https://telmogrupowick.com.br/kb/pt-br/article/449802/telmo" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/WpCT1B2m/MEU-2.jpg" alt="Procedimentos">
+                <h3>Procedimentos</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="http://10.150.0.251/lic/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/MTqKxbpj/MEU2-14.png" alt="LiC">
+                <h3>LiC</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="http://10.150.0.251/painelportabilidade/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/WzYyLPPP/MEU2-(34).png" alt="Portabilidade Wick">
+                <h3>Portabilidade Wick</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://app.omie.com.br/login/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/y6XsQj08/2.jpg" alt="OMIE">
+                <h3>OMIE</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://grupowick.github.io/SIM/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/mDPBcbBq/MEU2-(31).png" alt="SIM">
+                <h3>SIM</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://1drv.ms/f/c/bcafdbd3ebe35e17/IgAIZtC7w-K9T4U50bWkjy-kARXnPDPZlecBMGohvSvqfBc?e=swlXQi" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/fWr4q70X/MEU2-(29).png" alt="E-SIM WICK">
+                <h3>E-SIM WICK</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://grupowick.github.io/Verificador-eSIM/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/L6Ny7bGS/MEU2-(33).png" alt="Verificador de Esim">
+                <h3>Verificador de Esim</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://app.clicksign.com/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/rFrGt6L1/MEU.jpg" alt="Click Sign">
+                <h3>Click Sign</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://discord.com/channels/1506778763726164019/1506778765781368898" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/N0dc3QDv/MEU2-(27).png" alt="Discord">
+                <h3>Discord</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://speedboys.com.br/logar" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/zvJZYmTX/4.jpg" alt="SpeedBoys">
+                <h3>SpeedBoys</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://dash.muve.delivery/login" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/0NLQDNhW/MEU2-6.png" alt="Muve">
+                <h3>Muve</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://portal.brappdelivery.com.br/Painel" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/VkNyvKCs/MEU2-(23).png" alt="Brapp Delivery">
+                <h3>Brapp Delivery</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.strongpasswordgenerator.org/pt/random-pin-generator/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/KjVyYJqj/MEU2-(20).png" alt="Gerador de Token">
+                <h3>Gerador de Token</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://mail.hostinger.com/?_task=mail&_mbox=INBOX" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/VLZqtjGK/24.jpg" alt="Hostinger">
+                <h3>Hostinger</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://sistema.spc.org.br/spc/controleacesso/autenticacao/entry.action" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/gJ70Xp6y/MEU2-37.png" alt="SPC">
+                <h3>SPC</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.wickmanager.com.br/login" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/MpbjDVdk/MEU.jpg" alt="Wick Manager">
+                <h3>Wick Manager</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://suporte.safe-tech.in/index.php?redirect=/front/tracking.injector.php?error=3&noAUTO=1" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/Kv3PXTNJ/MEU-4.jpg" alt="Chamados">
+                <h3>Chamados</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://telmogrupowick.com.br/kb/pt-br/article/482622/em-breve?menuId=50742-127669-482622&ticketId=&q=" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/Prj4vdjF/MEU2-7.png" alt="Cartão Swile">
+                <h3>Cartão Swile</h3>
+            </a>
+        </div>
+    </div>
+
+    <!-- ABA 2: OPERADORAS -->
+    <div id="tab2" class="tab-content">
+        <div class="main__item">
+            <a href="https://mve.vivo.com.br/sec/dashboard" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/7ZJRcPjn/15.jpg" alt="Meu VIVO Empresas">
+                <h3>Meu VIVO Empresas</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://vivogestao.vivoempresas.com.br/Portal/data/login" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/YC4cHzLg/8.jpg" alt="Vivo Gestão">
+                <h3>Vivo Gestão</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://vivo.com.br/para-voce/por-que-vivo/qualidade/cobertura" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/85zj0g6X/57.jpg" alt="Cobertura Vivo">
+                <h3>Cobertura Vivo</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://vivo.com.br/para-voce/produtos-e-servicos/para-o-celular/roaming-internacional/vivo-travel" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/763JhkTj/MEU2-9.png" alt="Passaporte Vivo">
+                <h3>Passaporte Vivo</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://vivo.com.br/para-voce/por-que-vivo/qualidade/cobertura" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/8cxHwwHC/MEU-6.jpg" alt="Lojas Vivo">
+                <h3>Lojas Vivo</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.claro.com.br/celular/pos/passaporte" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/WzTz3NCC/MEU2-10.png" alt="Passaporte Claro">
+                <h3>Passaporte Claro</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.claro.com.br/mapa-de-cobertura?_ga=2.159237951.468443349.1715696086-986653462.1715696086" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/jq9LZ9dv/59.jpg" alt="Cobertura Claro">
+                <h3>Cobertura Claro</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.claro.com.br/encontre-uma-loja?gad_source=1&gclid=CjwKCAjw9IayBhBJEiwAVuc3fs0JJqQX8QJH3YtNvfPXEtu_vOeCNA8Yln0updH7qH6HSRJfnCg8xhoCDm4QAvD_BwE" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/jSHXQHJs/MEU-8.jpg" alt="Lojas Claro">
+                <h3>Lojas Claro</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://opera360.claro.com.br/login" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/9fjLnddc/18.jpg" alt="Opera 360 (Claro)">
+                <h3>Opera 360 (Claro)</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://contaonline.claro.com.br/webbow/login/initPJ_oqe.do" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/QtV6HPzS/conta-online.jpg" alt="Conta Online">
+                <h3>Conta Online</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://minhaclaroempresas.claro.com.br/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/sX3ZysNz/MEU2-5.png" alt="Minha Claro Empresas">
+                <h3>Minha Claro Empresas</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://plataformadegestao.claro.com.br/a/login" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/gkDFXrf6/MEU2-4.png" alt="Gol Revolution">
+                <h3>Gol Revolution</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://meutim.tim.com.br/menu/servicos/operacoes-tim-chip#" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/1zqnQRPB/MEU.jpg" alt="Meu Tim">
+                <h3>Meu Tim</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://timportaldigital.squadra.com.br/sign-in" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/Gtd1hrbr/MEU2-8.png" alt="Portal Digital TIM">
+                <h3>Portal Digital TIM</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://w4b.app/TIM/sites/auth/Login?returnURL=https://w4b.app/TIM/sites/operacional" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/W3tqFDmm/MEU2-(25).png" alt="Wings TIM">
+                <h3>Wings TIM</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.tim.com.br/para-voce/cobertura-e-roaming/mapa-de-cobertura" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/Bbdbb8wR/61.jpg" alt="Cobertura Tim">
+                <h3>Cobertura Tim</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.tim.com.br/para-voce/atendimento/lojas#73fb3015" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/dVP6yH3H/MEU-7.jpg" alt="Lojas Tim">
+                <h3>Lojas Tim</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://conexis.org.br/numeros/mapa-de-antenas/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/pXP2Bz13/MEU2-16.png" alt="Antenas Operadoras">
+                <h3>Antenas Operadoras</h3>
+            </a>
+        </div>
+    </div>
+
+    <!-- ABA 3: UTILITÁRIOS -->
+    <div id="tab3" class="tab-content">
+        <div class="main__item">
+            <a href="https://www.speedtest.net/pt" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/bwwwxwkj/MEU-2.jpg" alt="SpeedTest">
+                <h3>SpeedTest</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://consultanumero.abrtelecom.com.br/consultanumero/consulta/consultaSituacaoAtualCtg" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/ydhDhrcC/abr.jpg" alt="abrTelecom">
+                <h3>abrTelecom</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://downdetector.com.br/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/FFbGRqMn/MEU2-36.png" alt="Downdetector!">
+                <h3>Downdetector!</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.gov.br/anatel/pt-br/assuntos/celular-legal/consulte-sua-situacao" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/c1g0kC7G/MEU2-2.png" alt="Consulta IMEI">
+                <h3>Consulta IMEI</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://qualempresameligou.com.br/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/JhRXmH42/MEU2.png" alt="Qual Empresa Te Ligou">
+                <h3>Qual Empresa Te Ligou</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.ilovepdf.com/pt" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/7Zkh99z2/MEU2-27.png" alt="I Love PDF">
+                <h3>I Love PDF</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.tudocelular.com/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/4nC1kCnW/MEU2-15.png" alt="Ficha Técnica">
+                <h3>Ficha Técnica</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.google.com.br/maps" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/g26CzhWB/MEU2-2.png" alt="Google Maps">
+                <h3>Google Maps</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="http://www.sintegra.gov.br/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/d0kTrpk1/40.jpg" alt="Sintegra">
+                <h3>Sintegra</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://empresas.correios.com.br/#/login" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/KjKV2ZRb/36.jpg" alt="Correios Empresas">
+                <h3>Correios Empresas</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/B6fgWVW8/MEU-1.jpg" alt="Busca CEP">
+                <h3>Busca CEP</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://rastreamento.correios.com.br/app/index.php" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/FHTC1SLw/MEU2-16.png" alt="Correios Rastreio">
+                <h3>Correios Rastreio</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://fatura.orbitsistemas.com.br/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/NGnW74Cz/MEU2.png" alt="Orb it">
+                <h3>Orb it</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://sistemas.anatel.gov.br/anexar-api/publico/anexos/download/75c1fb5c7793c61d88e7b047aad8e09c" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/Gp9STQFT/MEU2-35.png" alt="Anatel">
+                <h3>Anatel</h3>
+            </a>
+        </div>
+    </div>
+
+    <!-- ABA 5: FINANCEIRO -->
+    <div id="tab5" class="tab-content">
+        <div class="main__item">
+            <a href="https://portal.omie.com.br/historico-financeiro" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/BvGCLWdm/MEU2-(18).png" alt="Portal Omie">
+                <h3>Portal Omie</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://dhemmerson.github.io/calculadora-de-multa/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/05z0Dpfs/81.png" alt="Calculadora de Multa">
+                <h3>Multa</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://dhemmerson.github.io/faturaproporcional/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/4d5qcpbt/80.png" alt="Calculadora de Proporcional">
+                <h3>Proporcional</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://dhemmerson.github.io/Calculadora-17/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/2S53Pq5d/MEU2-15.png" alt="Calculadora +17">
+                <h3>+17%</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://dhemmerson.github.io/Juros-por-Atraso/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/kMWFT7k1/79.png" alt="Calculadora de Juros">
+                <h3>Juros</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.nfe.fazenda.gov.br/portal/consultaRecaptcha.aspx?tipoConsulta=resumo&tipoConteudo=7PhJ+gAVw2g=" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/TPyDMyb6/MEU2-7.png" alt="NFCe">
+                <h3>NFCe</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.mercadopago.com.br/home" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/Zq0xXBkr/MEU-5.jpg" alt="Mercado Pago">
+                <h3>Mercado Pago</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.santander.com.br/empresas" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/c1Qkf5wX/38.jpg" alt="Santander">
+                <h3>Santander</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www10.goiania.go.gov.br/Internet/Login.aspx?OriginalURL=https%3a%2f%2fwww10.goiania.go.gov.br%2fsicaeportal%2fHomePage.aspx" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/j5YQ5tgK/22.jpg" alt="Prefeitura de Goiânia">
+                <h3>Prefeitura de Goiânia</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://timnegocia.com.br/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/Njv4c3BS/92.png" alt="TIM Negocia">
+                <h3>TIM Negocia</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://vivoemdia.vivo.com.br/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/PrgDDY7w/93.png" alt="Vivo em Dia">
+                <h3>Vivo em Dia</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://claro.negociafacil.com.br/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/vT11gZLh/94.png" alt="Claro Negocia">
+                <h3>Claro Negocia Fácil</h3>
+            </a>
+        </div>
+    </div>
+
+    <!-- ABA 6: DIRETORIA (PROTEGIDA) -->
+    <div id="tab6" class="tab-content">
+        <div class="main__item">
+            <a href="https://grupowick.github.io/Dados-Gerenciais/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/SNdy7zVy/MEU2-13.png" alt="Diretoria">
+                <h3>Dados Gerenciais</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://www.reclameaqui.com.br/login/empresa/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/xT8mpxnj/MEU2-31.png" alt="Reclame Aqui">
+                <h3>Reclame Aqui</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://grupowick.github.io/LiC/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/bJVJTSqD/MEU2-12.png" alt="LiC Diretoria">
+                <h3>LiC Diretoria</h3>
+            </a>
+        </div>
+        <div class="main__item">
+            <a href="https://grupowick.github.io/inventariowick/" target="_blank" rel="noopener">
+                <img src="https://i.postimg.cc/mrHb4S57/MEU2-17.png" alt="Inventário">
+                <h3>Inventário</h3>
+            </a>
+        </div>
+    </div>
+
+<body>

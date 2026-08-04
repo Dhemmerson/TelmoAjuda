@@ -1,4 +1,4 @@
-  <script>
+<script>
         const SENHA_GERAL = 'senha@321';
         const SENHA_DIRETORIA = '7';
 
@@ -416,5 +416,3 @@
             });
         });
     </script>
-</body>
-</html>
